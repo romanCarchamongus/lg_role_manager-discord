@@ -10,6 +10,7 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN_LG")
 
 intents = discord.Intents.default()
+intents.members = True
 bot = commands.Bot(intents=intents)
 
 @bot.event
@@ -60,7 +61,8 @@ async def createChannelForRoles(ctx, nom_role:str, joueur: discord.Member):
         }
 
         overwrites[joueur] = discord.PermissionOverwrite(view_channel=True)
-        await ctx.guild.create_text_channel("tmp-"+nom_role+"-"+joueur.name, overwrites=overwrites, category=ctx.channel.category)
+        channel = await ctx.guild.create_text_channel("tmp-"+nom_role+"-"+joueur.name, overwrites=overwrites, category=ctx.channel.category)
+        await channel.send('Ton rôle est : '+nom_role)
         await ctx.respond(f"Channel pour {joueur} créé")
 
 
